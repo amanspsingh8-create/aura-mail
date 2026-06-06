@@ -101,22 +101,21 @@ const elements = {
  * Checks if the protocol is file:// and routes the request through a CORS proxy if necessary.
  */
 function getRequestUrl(endpoint) {
-  // If running from file:// protocol, display warning banner and fall back to CORS proxy
-  if (window.location.protocol === 'file:') {
-    if (elements.fileProtocolWarning) {
-      elements.fileProtocolWarning.classList.remove('hidden');
-    }
-    const targetUrl = `${API_BASE}${endpoint}`;
-    return `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-  }
-  
   // If served from our local static server, route through the server's local reverse proxy
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     return `/api${endpoint}`;
   }
   
-  // Otherwise (e.g. deployed on GitHub Pages/Netlify), make direct CORS requests to Mail.tm
-  return `${API_BASE}${endpoint}`;
+  // If opened via local file protocol (file://), display the warning banner to guide the user
+  if (window.location.protocol === 'file:') {
+    if (elements.fileProtocolWarning) {
+      elements.fileProtocolWarning.classList.remove('hidden');
+    }
+  }
+  
+  // For all other hosts (like GitHub Pages/Netlify) and local file fallbacks, route through the CORS proxy
+  const targetUrl = `${API_BASE}${endpoint}`;
+  return `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 }
 
 /**
