@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraMail | Premium Temporary Disposable Email Generator</title>
+  <meta name="description" content="AuraMail provides free, secure, and disposable temporary email addresses. Protect your inbox from spam, bots, and trackers with a beautiful, fast temporary mail client.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Local File Protocol Warning Banner -->
+  <div id="file-protocol-warning" class="warning-banner hidden">
+    <div class="warning-content">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><strong>Security Restriction:</strong> Opened via local file (file://). Please double-click <strong>run.bat</strong> in the project folder to start the secure local server.</span>
+    </div>
+  </div>
+
+  <!-- Ambient Backdrop Glows -->
+  <div class="glow-orb orb-purple"></div>
+  <div class="glow-orb orb-teal"></div>
+  <div class="glow-orb orb-pink"></div>
+
+  <!-- App Wrapper -->
+  <div class="app-wrapper">
+    
+    <!-- Premium Header -->
+    <header class="main-header">
+      <div class="brand-container">
+        <div class="brand-logo">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div class="brand-text">
+          <h1>Aura<span>Mail</span></h1>
+          <span class="brand-subtitle">Disposable Inbox</span>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <div class="status-indicator">
+          <span class="status-pulse"></span>
+          <span id="status-text">Connecting...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-workspace">
+      
+      <!-- Top Generator Widget -->
+      <section class="generator-section">
+        <div class="premium-card generator-card">
+          <div class="card-gradient-border"></div>
+          
+          <div class="generator-main">
+            <div class="info-meta">
+              <span class="meta-badge"><i class="fa-solid fa-shield-halved"></i> Privacy Secured</span>
+              <h2>Temporary Email Generator</h2>
+            </div>
+            
+            <div class="generator-control-row">
+              <div class="email-field-wrapper">
+                <input type="text" id="email-address-input" value="Generating temporary address..." readonly>
+                <div class="input-glow"></div>
+                <div class="loader-container id-spinner hidden" id="email-loading-spinner">
+                  <div class="loader-ring"></div>
+                </div>
+              </div>
+              
+              <div class="control-actions">
+                <button id="btn-copy" class="action-btn btn-copy" aria-label="Copy Email">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy Address</span>
+                  <span class="tooltip-popup" id="copy-tooltip">Copied!</span>
+                </button>
+                
+                <button id="btn-refresh" class="action-btn btn-refresh" aria-label="Force Check Messages">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  <span>Sync Inbox</span>
+                </button>
+                
+                <button id="btn-new" class="action-btn btn-new" aria-label="Generate New Address">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  <span>Generate New</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="generator-meta-bar">
+            <div class="sync-status">
+              <div class="progress-ring-box">
+                <svg class="timer-ring" width="28" height="28">
+                  <circle class="ring-bg" stroke="rgba(255,255,255,0.04)" stroke-width="2.5" fill="none" r="11" cx="14" cy="14"/>
+                  <circle id="countdown-circle" class="ring-active" stroke="url(#teal-gradient)" stroke-width="2.5" fill="none" r="11" cx="14" cy="14"/>
+                  <defs>
+                    <linearGradient id="teal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#00f2fe" />
+                      <stop offset="100%" stop-color="#4facfe" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <span id="timer-text" class="timer-desc">Syncing in 10s...</span>
+            </div>
+            
+            <div class="domain-selector">
+              <span>Domain Extension:</span>
+              <div class="select-wrapper">
+                <select id="domain-select">
+                  <!-- Dynamically populated -->
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Workspace Grid (Inbox & Reader) -->
+      <section class="workspace-grid">
+        
+        <!-- Sidebar: Inbox List -->
+        <aside class="inbox-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <h3>Inbox Feed</h3>
+              <span class="inbox-counter" id="inbox-count">0</span>
+            </div>
+            <button id="btn-delete-all" class="clear-data-btn" title="Reset mailbox and delete local credentials">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+          
+          <div class="inbox-list-body" id="inbox-list-container">
+            <!-- Empty state illustration -->
+            <div class="empty-inbox" id="inbox-empty-state">
+              <div class="empty-illustration">
+                <div class="ripple-circle c-1"></div>
+                <div class="ripple-circle c-2"></div>
+                <div class="envelope-holder">
+                  <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+              </div>
+              <h4>Waiting for incoming mail...</h4>
+              <p>Give the address above to any sender. Incoming emails arrive here instantly.</p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Message Detail Panel -->
+        <article class="reader-panel" id="message-viewer-container">
+          
+          <!-- Active State -->
+          <div class="reader-active-view hidden" id="viewer-active-state">
+            
+            <div class="reader-head">
+              <div class="reader-meta">
+                <div class="sender-info">
+                  <div class="sender-avatar">
+                    <span id="sender-avatar-initial">S</span>
+                  </div>
+                  <div class="sender-details">
+                    <span class="sender-title">Sender</span>
+                    <span id="email-sender-val" class="sender-email">sender@example.com</span>
+                  </div>
+                </div>
+                <div class="date-info">
+                  <span class="date-title">Received Date</span>
+                  <span id="email-date-val" class="date-val">Today, 12:34 PM</span>
+                </div>
+              </div>
+              
+              <div class="subject-row">
+                <h2 id="email-subject-val">Welcome to AuraMail</h2>
+                
+                <div class="action-buttons-row">
+                  <div class="view-toggle">
+                    <button id="btn-toggle-html" class="toggle-btn active" title="Render rich HTML content">HTML View</button>
+                    <button id="btn-toggle-text" class="toggle-btn" title="View email raw text content">Plain Text</button>
+                  </div>
+                  
+                  <button id="btn-delete-current" class="delete-msg-btn" title="Permanently delete this email">
+                    <i class="fa-regular fa-trash-can"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Email Body Content View -->
+            <div class="reader-body">
+              <!-- Rich HTML Iframe -->
+              <iframe id="email-content-iframe" title="Sanitized HTML Content" sandbox="allow-popups"></iframe>
+              <!-- Fallback Plain Text Pre -->
+              <pre id="email-content-text" class="plain-text-box hidden"></pre>
+            </div>
+            
+            <!-- Attachments Footer Section -->
+            <div class="reader-attachments hidden" id="attachments-panel">
+              <div class="attachments-title">
+                <i class="fa-solid fa-paperclip"></i>
+                <span>Attachments (<span id="attachment-count">0</span>)</span>
+              </div>
+              <ul class="attachments-list" id="attachment-list">
+                <!-- Attachment items generated here -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Empty Screen State -->
+          <div class="reader-empty-view" id="viewer-empty-state">
+            <div class="glass-illustration">
+              <div class="isometric-envelope">
+                <div class="iso-face front"></div>
+                <div class="iso-face back"></div>
+                <div class="iso-face top"></div>
+                <div class="iso-sparkle s1"></div>
+                <div class="iso-sparkle s2"></div>
+              </div>
+            </div>
+            <h3>No Message Selected</h3>
+            <p>Select an email from the inbox feed on the left to read its contents here securely.</p>
+          </div>
+          
+          <!-- Loading Screen State -->
+          <div class="reader-loading-view hidden" id="viewer-loading-state">
+            <div class="loader-spinner"></div>
+            <h4>Retrieving message...</h4>
+            <p>Decrypting content and downloading assets securely.</p>
+          </div>
+          
+        </article>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span><i class="fa-solid fa-circle-check"></i> TLS 1.3 Active</span>
+        <span class="divider"></span>
+        <span><i class="fa-solid fa-shield-virus"></i> Sandbox Mode Enabled</span>
+      </div>
+      <div class="footer-right">
+        <span>Powered by Mail.tm API &amp; AuraMail Inc. &copy; 2026</span>
+      </div>
+    </footer>
+    
+  </div>
+
+  <!-- App Script -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
